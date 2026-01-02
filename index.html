@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chris Plays</title>
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --card: #ffffff;
+      --border: #111;
+      --text: #111;
+      --muted: #555;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      text-align: center;
+      padding: 48px 24px 32px;
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 900;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .thumb {
+      height: 110px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      background: linear-gradient(135deg, #eaeaea, #f6f6f6);
+    }
+
+    .thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.6), transparent 60%);
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .card:hover .thumb::after {
+      opacity: 1;
+    }
+
+    .thumb span {
+      position: relative;
+      z-index: 2;
+      font-size: 34px;
+      transition: transform .3s ease;
+    }
+
+    .card:hover .thumb span {
+      transform: scale(1.25) rotate(-6deg);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 14px 16px;
+    }
+
+    .info h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .info p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      border-top: 2px solid var(--border);
+      padding: 24px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>CHRIS FUN</h1>
+  <p>games and stuff by Chris</p>
+</header>
+
+<main>
+  <div class="grid">
+
+    <div class="card" onclick="location.href='perfect-circle.html'">
+      <div class="thumb"><img src="perfect-circle.jpg" alt="Perfect Circle"></div>
+      <div class="info">
+        <h3>Draw a Perfect Circle</h3>
+        <p>How close can you get?</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="thumb"><img src="password-game.jpg" alt="Password Game"></div>
+      <div class="info">
+        <h3>Password Game</h3>
+        <p>Rules you will hate.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="thumb"><img src="reaction-test.jpg" alt="Reaction Test"></div>
+      <div class="info">
+        <h3>Reaction Test</h3>
+        <p>Test your reflexes.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="thumb"><img src="human-timer.jpg" alt="Human Timer"></div>
+      <div class="info">
+        <h3>Human Timer</h3>
+        <p>Your inner clock.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="thumb"><img src="emoji-calc.jpg" alt="Emoji Calculator"></div>
+      <div class="info">
+        <h3>Emoji Calculator</h3>
+        <p>Math but weird.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="thumb"><img src="wave-soon.jpg" alt="Wave Sim"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-weight:700;font-size:18px;">✕ SOON</div></div>
+      <div class="info">
+        <h3>Wave Sim</h3>
+        <p>Relax and watch.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  © 2026 Chris Fun — No rights reserved
+</footer>
+
+</body>
+</html>
