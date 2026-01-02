@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Draw a Perfect Circle — Chris</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #0b0b0b;
+      --text: #ffffff;
+      --muted: #9a9a9a;
+      --accent: #ffffff;
+      --good: #4cff88;
+      --bad: #ff4c4c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Welcome */
+    .welcome {
+      text-align: center;
+      animation: fadeIn .6s ease;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+    p { color: var(--muted); margin: 0 0 28px; }
+    button {
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Game */
+    .game {
+      display: none;
+      width: min(680px, 92vw);
+      text-align: center;
+      animation: fadeIn .4s ease;
+    }
+    .top {
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    canvas {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #000;
+      border-radius: 50%;
+      border: 1px solid #222;
+      cursor: crosshair;
+    }
+    .center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      font-size: 2.2rem;
+      font-weight: 600;
+    }
+    .wrap {
+      position: relative;
+    }
+    .cross {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      font-size: 4rem;
+      color: var(--bad);
+      pointer-events: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="welcome" id="welcome">
+    <h1>Draw a perfect circle</h1>
+    <p>by <strong>Chris</strong></p>
+    <button id="go">Go</button>
+  </div>
+
+  <div class="game" id="game">
+    <div class="top">Draw a perfect circle</div>
+    <div class="wrap">
+      <canvas id="canvas" width="600" height="600"></canvas>
+      <div class="center" id="center">0%</div>
+      <div class="cross" id="cross">✕</div>
+    </div>
+  </div>
+
+<script>
+  const go = document.getElementById('go');
+  const welcome = document.getElementById('welcome');
+  const game = document.getElementById('game');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const centerText = document.getElementById('center');
+  const cross = document.getElementById('cross');
+
+  let drawing = false;
+  let points = [];
+  const radiusLimit = canvas.width / 2 - 10;
+
+  go.onclick = () => {
+    welcome.style.display = 'none';
+    game.style.display = 'block';
+  };
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    return {
+      x: (e.clientX - r.left) * (canvas.width / r.width),
+      y: (e.clientY - r.top) * (canvas.height / r.height)
+    };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    drawing = true;
+    points = [];
+    cross.style.display = 'none';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    centerText.textContent = '0%';
+    points.push(pos(e));
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const p = pos(e);
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const dist = Math.hypot(p.x - cx, p.y - cy);
+
+    if (dist > radiusLimit) {
+      cross.style.display = 'grid';
+      drawing = false;
+      return;
+    }
+
+    points.push(p);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    const prev = points[points.length - 2];
+    ctx.moveTo(prev.x, prev.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!drawing || points.length < 10) return;
+    drawing = false;
+    score();
+  });
+
+  function score() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const dists = points.map(p => Math.hypot(p.x - cx, p.y - cy));
+    const avg = dists.reduce((a,b)=>a+b,0)/dists.length;
+    const variance = dists.reduce((s,d)=>s+Math.pow(d-avg,2),0)/dists.length;
+    const deviation = Math.sqrt(variance);
+
+    let score = Math.max(0, 100 - deviation * 3);
+    score = Math.min(100, Math.round(score));
+
+    centerText.textContent = score + '%';
+    centerText.style.color = score > 90 ? 'var(--good)' : '#fff';
+
+    ctx.strokeStyle = 'rgba(76,255,136,.6)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, avg, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+</script>
+</body>
+</html>
